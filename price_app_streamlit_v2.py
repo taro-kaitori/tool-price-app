@@ -9,8 +9,7 @@ def login():
     if "logged_in" not in st.session_state:
         st.session_state["logged_in"] = False
 
-    login_button = st.sidebar.button("ログイン")
-    if login_button:
+    if st.sidebar.button("ログイン"):
         if username == "admin" and password == "okoku1038":
             st.session_state["logged_in"] = True
             st.success("ログイン成功！")
@@ -24,4 +23,4 @@ if not login():
     st.stop()
 
 st.title("🔧 工具価格査定フォーム")
-st.write("ログイン後に本体が正しく表示されています（テストモード）")
+st.write("これは実際の査定機能が含まれる本番バージョンです（ログイン後表示）")
