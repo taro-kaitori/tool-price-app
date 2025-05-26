@@ -1,4 +1,4 @@
-
+# 🔄 再起動用コメント（2025-05-26）
 import streamlit as st
 import pandas as pd
 
