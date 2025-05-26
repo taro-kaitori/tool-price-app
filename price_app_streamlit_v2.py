@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 
@@ -10,7 +9,8 @@ def login():
     if "logged_in" not in st.session_state:
         st.session_state["logged_in"] = False
 
-    if st.sidebar.button("ログイン"):
+    login_button = st.sidebar.button("ログイン")
+    if login_button:
         if username == "admin" and password == "okoku1038":
             st.session_state["logged_in"] = True
             st.success("ログイン成功！")
@@ -23,134 +23,5 @@ def login():
 if not login():
     st.stop()
 
-
-
-import streamlit as st
-import pandas as pd
-
-def login():
-    login_successful = False
-
-        if username == "admin" and password == "okoku1038":
-            login_successful = True
-        else:
-            st.error("ユーザー名またはパスワードが間違っています")
-        login_successful = True
-
-    return login_successful
-
-if not login():
-
-
-
-import streamlit as st
-import pandas as pd
-
-def login():
-
-
-    if login_button:
-        if username == "admin" and password == "okoku1038":
-        else:
-            st.error("ユーザー名またはパスワードが間違っています")
-
-
-if not login():
-
-
-
-import streamlit as st
-import pandas as pd
-
-def login():
-
-    # 状態の初期化
-
-        if username == "admin" and password == "okoku1038":
-        else:
-            st.error("ユーザー名またはパスワードが間違っています")
-
-
-if not login():
-
-
-
-import streamlit as st
-import pandas as pd
-
-def login():
-
-    login_successful = False
-        if username == "admin" and password == "okoku1038":
-            login_successful = True
-        else:
-            st.error("ユーザー名またはパスワードが間違っています")
-        login_successful = True
-
-    return login_successful
-
-if not login():
-
-
-
-import streamlit as st
-import pandas as pd
-
-def login():
-        if username == "admin" and password == "okoku1038":
-        else:
-            st.error("ユーザー名またはパスワードが間違っています")
-
-if not login():
-
-
-
-import streamlit as st
-import pandas as pd
-
-def login():
-        if username == "admin" and password == "okoku1038":
-        else:
-            st.error("ユーザー名またはパスワードが間違っています")
-
-if not login():
-
-
-
-import streamlit as st
-import pandas as pd
-
-def login():
-        if username == "admin" and password == "okoku1038":
-        else:
-            st.error("ユーザー名またはパスワードが間違っています")
-
-    login()
-
-
-
-import streamlit as st
-import pandas as pd
-
-def login():
-        if username == "admin" and password == "okoku1038":
-        else:
-            st.error("ユーザー名またはパスワードが間違っています")
-
-    login()
-
-
-
-import streamlit as st
-import pandas as pd
-
-def login():
-
-        if username == "admin" and password == "okoku1038":
-        else:
-            st.error("ユーザー名またはパスワードが間違っています")
-
-    login()
-
-# --- メイン画面 ---
 st.title("🔧 工具価格査定フォーム")
+st.write("ログイン後に本体が正しく表示されています（テストモード）")
