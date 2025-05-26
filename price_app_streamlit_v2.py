@@ -1,4 +1,4 @@
-# 🔄 再起動用コメント（2025-05-26）
+
 import streamlit as st
 import pandas as pd
 
@@ -6,23 +6,39 @@ def login():
     st.sidebar.title("🔐 ログイン")
     username = st.sidebar.text_input("ユーザー名")
     password = st.sidebar.text_input("パスワード", type="password")
+    login_successful = False
 
-    if "logged_in" not in st.session_state:
-        st.session_state["logged_in"] = False
-
-    login_button = st.sidebar.button("ログイン")
-    if login_button:
+    if st.sidebar.button("ログイン"):
         if username == "admin" and password == "okoku1038":
             st.session_state["logged_in"] = True
+            login_successful = True
             st.success("ログイン成功！")
         else:
             st.session_state["logged_in"] = False
             st.error("ユーザー名またはパスワードが間違っています")
+    elif st.session_state.get("logged_in", False):
+        login_successful = True
 
-    return st.session_state["logged_in"]
+    return login_successful
 
 if not login():
     st.stop()
+
+
+
+import streamlit as st
+import pandas as pd
+
+def login():
+
+
+    if login_button:
+        if username == "admin" and password == "okoku1038":
+        else:
+            st.error("ユーザー名またはパスワードが間違っています")
+
+
+if not login():
 
 
 
