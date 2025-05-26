@@ -11,10 +11,22 @@ def login():
             st.session_state["logged_in"] = True
         else:
             st.error("ユーザー名またはパスワードが間違っています")
+    return st.session_state.get("logged_in", False)
 
-if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
-    login()
+if not login():
     st.stop()
+
+
+
+import streamlit as st
+import pandas as pd
+
+def login():
+        if username == "admin" and password == "okoku1038":
+        else:
+            st.error("ユーザー名またはパスワードが間違っています")
+
+    login()
 
 
 
