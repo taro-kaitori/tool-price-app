@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 import openpyxl
 
-# --- データ読み込み関数 ---
 @st.cache_data
 def load_data():
     inventory = pd.read_csv("inventory_data.csv")
@@ -12,7 +11,6 @@ def load_data():
     category_df = pd.read_excel("category_coefficients.xlsx", engine="openpyxl")
     return inventory, maker_df, category_df
 
-# --- 丸め処理 ---
 def round_price(value):
     if pd.isna(value):
         return ""
@@ -26,13 +24,12 @@ def round_price(value):
     else:
         return f"{round(value, -4):,}円"
 
-# --- 査定処理 ---
 def estimate(inventory, maker_df, category_df, maker_name, keyword):
     df = inventory[inventory["メーカー名"] == maker_name]
     df = df[df["多分型番"].astype(str).str.contains(keyword, case=False, na=False)]
 
     if df.empty:
-        return "該当データがありません", None, None
+        return "該当データがありません", None, None, None
 
     first_row = df.iloc[0]
     product_name = first_row["商品名"]
@@ -71,8 +68,8 @@ def estimate(inventory, maker_df, category_df, maker_name, keyword):
                 continue
             base_sell = base_data["買取売価"].mean()
             base_cost = base_data["買取原価"].mean()
-            sell = base_sell * maker_rate[grade] / maker_rate[base_grade] * category_rate[grade] / 100
-            cost = base_cost * maker_rate[grade] / maker_rate[base_grade] * category_rate[grade] / 100
+            sell = base_sell * maker_rate.get(grade, 100) / maker_rate[base_grade] * category_rate.get(grade, 100) / 100
+            cost = base_cost * maker_rate.get(grade, 100) / maker_rate[base_grade] * category_rate.get(grade, 100) / 100
             row = {
                 "グレード": grade,
                 "買取点数": 0,
@@ -89,7 +86,25 @@ def estimate(inventory, maker_df, category_df, maker_name, keyword):
 
     return product_name, maker_rank, category_code, pd.DataFrame(results)
 
-# --- アプリ表示部分 ---
+# メーカー別全データ出力
+def export_by_maker(inventory, maker_name, maker_df, category_df):
+    df = inventory[inventory["メーカー名"] == maker_name].copy()
+    if df.empty:
+        return pd.DataFrame()
+
+    result_list = []
+    for model in df["多分型番"].dropna().unique():
+        _, mr, cat_code, result = estimate(df, maker_df, category_df, maker_name, model)
+        if isinstance(result, pd.DataFrame):
+            result["メーカー"] = maker_name
+            result["型番"] = model
+            result["メーカーランク"] = mr
+            result["カテゴリコード"] = cat_code
+            result["商品名"] = df[df["多分型番"] == model]["商品名"].values[0]
+            result_list.append(result)
+    return pd.concat(result_list, ignore_index=True) if result_list else pd.DataFrame()
+
+# アプリUI
 st.title("🔧 工具価格査定フォーム")
 
 inventory, maker_table, category_table = load_data()
@@ -120,3 +135,19 @@ if selected_maker and keyword:
         )
     else:
         st.warning("該当するデータが見つかりませんでした。")
+
+# メーカー別CSV出力
+if selected_maker:
+    if st.button("📦 このメーカーの査定データをCSVで出力"):
+        output_df = export_by_maker(inventory, selected_maker, maker_table, category_table)
+        if not output_df.empty:
+            csv = output_df.to_csv(index=False).encode("utf-8-sig")
+            st.download_button(
+                "📥 メーカー全体の査定データをダウンロード",
+                csv,
+                f"{selected_maker}_全体査定データ.csv",
+                "text/csv",
+                key="download-maker-csv"
+            )
+        else:
+            st.warning("出力可能なデータがありませんでした。")
