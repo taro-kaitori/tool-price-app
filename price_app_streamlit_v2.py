@@ -7,11 +7,11 @@ def login():
     username = st.sidebar.text_input("ユーザー名")
     password = st.sidebar.text_input("パスワード", type="password")
 
-    # 状態の初期化
     if "logged_in" not in st.session_state:
         st.session_state["logged_in"] = False
 
-    if st.sidebar.button("ログイン"):
+    login_button = st.sidebar.button("ログイン")
+    if login_button:
         if username == "admin" and password == "okoku1038":
             st.session_state["logged_in"] = True
             st.success("ログイン成功！")
@@ -23,6 +23,22 @@ def login():
 
 if not login():
     st.stop()
+
+
+
+import streamlit as st
+import pandas as pd
+
+def login():
+
+    # 状態の初期化
+
+        if username == "admin" and password == "okoku1038":
+        else:
+            st.error("ユーザー名またはパスワードが間違っています")
+
+
+if not login():
 
 
 
