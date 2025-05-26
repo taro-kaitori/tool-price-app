@@ -26,6 +26,18 @@ def login():
         else:
             st.error("ユーザー名またはパスワードが間違っています")
 
+if not login():
+
+
+
+import streamlit as st
+import pandas as pd
+
+def login():
+        if username == "admin" and password == "okoku1038":
+        else:
+            st.error("ユーザー名またはパスワードが間違っています")
+
     login()
 
 
