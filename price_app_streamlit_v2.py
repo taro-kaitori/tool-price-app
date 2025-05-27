@@ -46,7 +46,8 @@ def estimate(inventory, maker_df, category_df, maker_name, keyword):
     base_data = df[df["グレード"] == base_grade]
     results = []
 
-    for grade in ["未使用", "中古A", "中古B", "中古C", "中古D"]:
+    all_grades = ["未使用", "中古A", "中古B", "中古C", "中古D"]
+    for grade in all_grades:
         target = df[df["グレード"] == grade]
         count = len(target)
 
@@ -64,7 +65,7 @@ def estimate(inventory, maker_df, category_df, maker_name, keyword):
                 "最小原価": round_price(target["買取原価"].min()),
             }
         else:
-            if base_data.empty or maker_rank not in maker_rate or category_code not in category_rate:
+            if base_data.empty or base_grade not in maker_rate or grade not in maker_rate:
                 continue
             base_sell = base_data["買取売価"].mean()
             base_cost = base_data["買取原価"].mean()
@@ -86,7 +87,6 @@ def estimate(inventory, maker_df, category_df, maker_name, keyword):
 
     return product_name, maker_rank, category_code, pd.DataFrame(results)
 
-# メーカー別全データ出力
 def export_by_maker(inventory, maker_name, maker_df, category_df):
     df = inventory[inventory["メーカー名"] == maker_name].copy()
     if df.empty:
@@ -104,7 +104,7 @@ def export_by_maker(inventory, maker_name, maker_df, category_df):
             result_list.append(result)
     return pd.concat(result_list, ignore_index=True) if result_list else pd.DataFrame()
 
-# アプリUI
+# アプリ表示
 st.title("🔧 工具価格査定フォーム")
 
 inventory, maker_table, category_table = load_data()
@@ -136,7 +136,6 @@ if selected_maker and keyword:
     else:
         st.warning("該当するデータが見つかりませんでした。")
 
-# メーカー別CSV出力
 if selected_maker:
     if st.button("📦 このメーカーの査定データをCSVで出力"):
         output_df = export_by_maker(inventory, selected_maker, maker_table, category_table)
